@@ -3,7 +3,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 const bodyparser = require('body-parser');
 const db = require('./db/db');
-const mongo_url = 'mongodb+srv://yadavpankaj092785:O5CKKPf56NJaGDyi@cluster0.dp7un9n.mongodb.net/authtest'
 app.use(bodyparser.json());
 
 app.get('/', (req, res) => res.send('Hello World!'));
