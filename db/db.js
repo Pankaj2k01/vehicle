@@ -5,7 +5,7 @@ const mongo_uri = process.env.MONGO_URI;
 mongoose
     .connect(mongo_uri)
     .then(() => console.log("Connected"))
-    .catch(() => console.log(err));
+    .catch(() => console.log("Error"));
 
 const authSchema = new mongoose.Schema({
 
