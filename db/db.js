@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const mongo_uri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/authtest';
+const mongo_uri = process.env.MONGO_URI || 'mongodb+srv://yadavpankaj092785:O5CKKPf56NJaGDyi@cluster0.dp7un9n.mongodb.net/authtest';
 
 mongoose
-    .connect('mongodb://127.0.0.1:27017/vehicle-insurance', {useNewUrlParser: true, useUnifiedTopology: true})
+    .connect('mongo_uri', {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => console.log("Connected to database"))
     .catch(() => console.log("Error connecting to database"));
 
