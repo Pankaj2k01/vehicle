@@ -27,7 +27,7 @@ app.post("/register", async (req, res) => {
     const body = req.body;
 
     const result = await db.create(body);
-    res.status(201).json({msg: "user registered successfully"})
+    res.status(201).json({msg: "user registered successful"})
 })
 
 app.listen(port, () => console.log(`App listening on port ${port}!`))
