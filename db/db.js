@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-require('dotenv').config()
-const mongo_uri = process.env.MONGO_URI 
+
 mongoose
-    .connect('mongo_uri')
+    .connect('mongodb+srv://yadavpankaj092785:O5CKKPf56NJaGDyi@cluster0.dp7un9n.mongodb.net/authtest')
     .then(() => console.log("Connected to database"))
     .catch(() => console.log("Error connecting to database"));
 
