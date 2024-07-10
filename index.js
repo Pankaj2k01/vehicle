@@ -16,7 +16,7 @@ app.post("/login", async (req, res) => {
     const result = await db.find({"email": email, "pass": pass});
     if(result.length == 1) {
                 // Login successful, redirect to main activity
-                res.json({msg: "Login successful", status: 200});
+                res.json({msg: "Login successful", status: 200, user: result[0]});
             } else {
                 res.json({msg: "Login failed", status: 400});
             }
@@ -31,7 +31,7 @@ app.post("/login", async (req, res) => {
         
             const result = await db.create({name, email, pass});
             if(result.length == 1) {
-                res.json({msg: "User registered successfully", status: 201});
+                res.json({msg: "User registered successfully", status: 201, user: result[0]});
             } else {
                 res.json({msg: "User registration failed", status: 400});
             }
