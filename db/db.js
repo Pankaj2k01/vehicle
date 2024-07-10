@@ -4,8 +4,8 @@ const mongo_uri = process.env.MONGO_URI;
 
 mongoose
     .connect(mongo_uri)
-    .then(() => console.log("Connected to database"))
-    .catch(() => console.log("Error connecting to database"));
+    .then(() => console.log("Connected"))
+    .catch(() => console.log(err));
 
 const authSchema = new mongoose.Schema({
 
