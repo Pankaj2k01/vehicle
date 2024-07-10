@@ -24,6 +24,6 @@ const authSchema = new mongoose.Schema({
     }
 });
 
-const creds = mongoose.model('creds', authSchema, );
+const auth = mongoose.model('auth', authSchema, 'creds');
 
-module.exports = creds;
+module.exports = auth;
