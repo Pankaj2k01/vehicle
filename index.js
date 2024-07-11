@@ -25,9 +25,6 @@ app.post("/login", async (req, res) => {
         // Register
         app.post("/register", async (req, res) => {
             const body = req.body;
-            const name = body.name;
-            const email = body.email;
-            const pass = body.pass;
         
             const result = await db.create({body});
             res.status(201).json({msg: "user registered successfully"})
