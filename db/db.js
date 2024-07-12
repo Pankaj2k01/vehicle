@@ -7,24 +7,25 @@ mongoose
     .then(() => console.log("Connected"))
     .catch(() => console.log("Error"))
 
-const userSchema = new mongoose.Schema({
-  email: String,
-  password: String,
-  name: String,
-  policyNumber: String,
-  vehicleNumber: String
-});
+    const userSchema = new mongoose.Schema({
+      email: { type: String, required: true },
+      password: { type: String, required: true },
+      name: { type: String, required: true },
+      policyNumber: { type: String, required: true },
+      vehicleNumber: { type: String, required: true }
+    });
+    
+    const claimSchema = new mongoose.Schema({
+      claimType: { type: String, required: true },
+      claimDescription: { type: String, required: true },
+      dateOfIncident: { type: Date, required: true },
+      locationOfIncident: { type: String, required: true },
+      policyNumber: { type: String, required: true },
+      vehicleNumber: { type: String, required: true }
+    });
+    
+    const User = mongoose.model('User', userSchema);
+    const Claim = mongoose.model('Claim', claimSchema);
 
-const claimSchema = new mongoose.Schema({
-  claimType: String,
-  claimDescription: String,
-  dateOfIncident: Date,
-  locationOfIncident: String,
-  policyNumber: String,
-  vehicleNumber: String
-});
-
-const User = mongoose.model('User', userSchema);
-const Claim = mongoose.model('Claim', claimSchema);
 
 module.exports = { User, Claim };
