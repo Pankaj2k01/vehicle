@@ -40,8 +40,11 @@ app.post('/register', async (req, res) => {
 
 app.get('/deshboard', async (req, res) => {
   try {
-    const users = await User.find({});
-    res.send(users);
+    const name = req.query.name;
+    const policyNumber = req.query.policyNumber;
+    const vehicleNumber = req.query.vehicleNumber;
+    const user = await User.findOne({name, policyNumber, vehicleNumber});
+    res.send(user);
   } catch (err) {
     res.status(500).send({ message: 'Error fetching user' });
   }
@@ -65,8 +68,8 @@ app.post('/raise-claim', async (req, res) => {
 
 app.get('/view-claims', async (req, res) => {
   try {
-    const claims = await Claim.find({});
-    res.send(claims);
+    const claim = await Claim.find({});
+    res.send(claim);
   } catch (err) {
     res.status(500).send({ message: 'Error fetching claims' });
   }
@@ -75,8 +78,9 @@ app.get('/view-claims', async (req, res) => {
 app.get('/view-policy', async (req, res) => {
   try {
     const policyNumber = req.query.policyNumber;
-    const user = await User.findOne({ policyNumber });
-    if (!user) {
+    const vehicleNumber = req.query.vehicleNumber;
+    const claim = await Claim.findOne({ policyNumber, vehicleNumber });
+    if (!claim) {
       res.status(404).send({ message: 'Policy not found' });
     } else {
       res.send(user);
