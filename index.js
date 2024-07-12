@@ -30,7 +30,7 @@ app.post('/register', async (req, res) => {
     const name = req.body.name;
     const policyNumber = req.body.policyNumber;
     const vehicleNumber = req.body.vehicleNumber;
-    const user = new User({ email, password, name, policyNumber, vehicleNumber });
+    const user = new User({ "email": email,"password": password, name, policyNumber, vehicleNumber });
     await user.save();
     res.send({ message: 'Registration successful' });
   } catch (err) {
