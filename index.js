@@ -38,6 +38,15 @@ app.post('/register', async (req, res) => {
   }
 });
 
+app.get('/deshboard', async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.send(users);
+  } catch (err) {
+    res.status(500).send({ message: 'Error fetching user' });
+  }
+});
+
 app.post('/raise-claim', async (req, res) => {
   try {
     const claimType = req.body.claimType;
