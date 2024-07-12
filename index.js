@@ -2,16 +2,14 @@ const express = require('express');
 const app = express();
 const { User, Claim } = require('./db/db');
 const port = process.env.PORT || 3000;
-const bodyparser = require('body-parser');
-app.use(bodyparser.json());
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
-app.get('/', (req, res) => res.send('Hello World!'))
-
+app.get('/', (req, res) => res.send('Hello World!'));
 
 app.post('/login', async (req, res) => {
   try {
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
     const user = await User.findOne({ email, password });
     if (!user) {
       res.status(401).send({ message: 'Invalid email or password' });
@@ -25,12 +23,8 @@ app.post('/login', async (req, res) => {
 
 app.post('/register', async (req, res) => {
   try {
-    const email = req.body.email;
-    const password = req.body.password;
-    const name = req.body.name;
-    const policyNumber = req.body.policyNumber;
-    const vehicleNumber = req.body.vehicleNumber;
-    const user = new User({ "email": email,"password": password, name, policyNumber, vehicleNumber });
+    const { email, password, name, policyNumber, vehicleNumber } = req.body;
+    const user = new User({ email, password, name, policyNumber, vehicleNumber });
     await user.save();
     res.send({ message: 'Registration successful' });
   } catch (err) {
@@ -38,13 +32,15 @@ app.post('/register', async (req, res) => {
   }
 });
 
-app.get('/deshboard', async (req, res) => {
+app.get('/dashboard', async (req, res) => {
   try {
-    const name = req.query.name;
-    const policyNumber = req.query.policyNumber;
-    const vehicleNumber = req.query.vehicleNumber;
-    const user = await User.findOne({name, policyNumber, vehicleNumber});
-    res.send(user);
+    const { name, policyNumber, vehicleNumber } = req.query;
+    const user = await User.findOne({ name, policyNumber, vehicleNumber });
+    if (!user) {
+      res.status(404).send({ message: 'User not found' });
+    } else {
+      res.send({ name: user.name, policyNumber: user.policyNumber, vehicleNumber: user.vehicleNumber });
+    }
   } catch (err) {
     res.status(500).send({ message: 'Error fetching user' });
   }
@@ -52,12 +48,7 @@ app.get('/deshboard', async (req, res) => {
 
 app.post('/raise-claim', async (req, res) => {
   try {
-    const claimType = req.body.claimType;
-    const claimDescription = req.body.claimDescription;
-    const dateOfIncident = req.body.dateOfIncident;
-    const locationOfIncident = req.body.locationOfIncident;
-    const policyNumber = req.body.policyNumber;
-    const vehicleNumber = req.body.vehicleNumber;
+    const { claimType, claimDescription, dateOfIncident, locationOfIncident, policyNumber, vehicleNumber } = req.body;
     const claim = new Claim({ claimType, claimDescription, dateOfIncident, locationOfIncident, policyNumber, vehicleNumber });
     await claim.save();
     res.send({ message: 'Claim raised successfully' });
@@ -68,8 +59,8 @@ app.post('/raise-claim', async (req, res) => {
 
 app.get('/view-claims', async (req, res) => {
   try {
-    const claim = await Claim.find({});
-    res.send(claim);
+    const claims = await Claim.find({});
+    res.send(claims);
   } catch (err) {
     res.status(500).send({ message: 'Error fetching claims' });
   }
@@ -77,17 +68,16 @@ app.get('/view-claims', async (req, res) => {
 
 app.get('/view-policy', async (req, res) => {
   try {
-    const policyNumber = req.query.policyNumber;
-    const vehicleNumber = req.query.vehicleNumber;
+    const { policyNumber, vehicleNumber } = req.query;
     const claim = await Claim.findOne({ policyNumber, vehicleNumber });
     if (!claim) {
       res.status(404).send({ message: 'Policy not found' });
     } else {
-      res.send(user);
+      res.send({ policyNumber: claim.policyNumber, vehicleNumber: claim.vehicleNumber });
     }
   } catch (err) {
     res.status(500).send({ message: 'Error fetching policy' });
   }
 });
-          
+
 app.listen(port, () => console.log(`App listening on port ${port}!`));
