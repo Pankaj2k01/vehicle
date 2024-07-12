@@ -9,8 +9,6 @@ app.use(bodyparser.json());
 app.get('/', (req, res) => res.send('Hello World!'))
 
 
-
-
 app.post('/login', async (req, res) => {
   try {
     const email = req.body.email;
@@ -47,14 +45,14 @@ app.get('/dashboard', async (req, res) => {
     const name = req.query.name;
     const policyNumber = req.query.policyNumber;
     const vehicleNumber = req.query.vehicleNumber;
-    const user = await User.findOne({ name, policyNumber, vehicleNumber });
+    const user = await User.findOne({ name, policyNumber, vehicleNumber});
     if (!user) {
-      res.status(404).send({ message: 'data not found' });
+      res.status(404).send({ message: 'Policy not found' });
     } else {
-      res.send({ name: user.name, policyNumber: user.policyNumber, vehicleNumber: user.vehicleNumber });
+      res.send(user);
     }
   } catch (err) {
-    res.status(500).send({ message: 'Error fetching data' });
+    res.status(500).send({ message: 'Error fetching policy' });
   }
 });
 
@@ -77,8 +75,8 @@ app.post('/raise-claim', async (req, res) => {
 
 app.get('/view-claims', async (req, res) => {
   try {
-    const claim = await Claim.find({});
-    res.send(claim);
+    const claims = await Claim.find({});
+    res.send(claims);
   } catch (err) {
     res.status(500).send({ message: 'Error fetching claims' });
   }
@@ -89,11 +87,11 @@ app.get('/view-policy', async (req, res) => {
   try {
     const policyNumber = req.query.policyNumber;
     const vehicleNumber = req.query.vehicleNumber;
-    const claim = await Claim.findOne({ policyNumber,vehicleNumber });
+    const claim = await Claim.findOne({ policyNumber, vehicleNumber});
     if (!claim) {
       res.status(404).send({ message: 'Policy not found' });
     } else {
-      res.send({ policyNumber: claim.policyNumber, vehicleNumber: claim.vehicleNumber });
+      res.send(claim);
     }
   } catch (err) {
     res.status(500).send({ message: 'Error fetching policy' });
