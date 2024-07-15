@@ -85,15 +85,15 @@ app.patch('/change-password', async (req, res) => {
 
 app.get('/dashboard', async (req, res) => {
   try {
-    const name = req.query.name;
-    const user = await User.findOne({"name": name});
+    const email = req.query.email; // assuming you're passing the email as a query parameter
+    const user = await User.findOne({ email });
     if (!user) {
-      res.status(404).send({ message: 'name not found' });
+      res.status(404).send({ message: 'User not found' });
     } else {
-      res.send(user);
+      res.json({ name: user.name }); // return the user name in the response
     }
   } catch (err) {
-    res.status(500).send({ message: 'Error fetching data' });
+    res.status(500).send({ message: 'Error fetching user data' });
   }
 });
 
