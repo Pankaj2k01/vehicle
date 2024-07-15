@@ -5,6 +5,12 @@ const port = process.env.PORT || 3000;
 const bodyparser = require('body-parser');
 app.use(bodyparser.json());
 
+// Generate a unique policy number
+function generatePolicyNumber() {
+  const uuid = require('uuid');
+  return uuid.v4().slice(0, 8);
+}
+
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -125,23 +131,9 @@ app.get('/view-claims', async (req, res) => {
 
 app.post('/buy-policy', async (req, res) => {
   try {
-    const vehicleNumber = req.body.vehicleNumber;
-    const policyStartDate = req.body.policyStartDate;
-    const policyEndDate = req.body.policyEndDate;
-    const policyPrice = req.body.policyPrice;
-    const vehicleType = req.body.vehicleType;
-
-    // Generate a unique policy number
+    const { vehicleNumber, policyStartDate, policyEndDate, policyPrice, vehicleType } = req.body;
     const policyNumber = generatePolicyNumber();
-
-    const policy = new Policy({ 
-      vehicleNumber, 
-      policyStartDate, 
-      policyEndDate, 
-      policyPrice, 
-      vehicleType, 
-      policyNumber 
-    });
+    const policy = new Policy({ vehicleNumber, policyStartDate, policyEndDate, policyPrice, vehicleType, policyNumber });
     await policy.save();
     res.send({ message: 'Policy purchased successfully!', policyNumber });
   } catch (err) {
@@ -149,12 +141,6 @@ app.post('/buy-policy', async (req, res) => {
   }
 });
 
-
-function generatePolicyNumber() {
-
-  const uuid = require('uuid');
-  return uuid.v4().slice(0, 8);
-}
 
 app.get('/view-policy', async (req, res) => {
   try {
