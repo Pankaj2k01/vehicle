@@ -30,9 +30,7 @@ app.post('/register', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const name = req.body.name;
-    const policyNumber = req.body.policyNumber;
-    const vehicleNumber = req.body.vehicleNumber;
-    const user = new User({ "email": email,"password": password, name, policyNumber, vehicleNumber });
+    const user = new User({ "email": email,"password": password, "name": name});
     await user.save();
     res.send({ message: 'Registration successful' });
   } catch (err) {
@@ -45,11 +43,11 @@ app.get('/dashboard', async (req, res) => {
     const name = req.query.name;
     const policyNumber = req.query.policyNumber;
     const vehicleNumber = req.query.vehicleNumber;
-    const user = await User.findOne({ name, policyNumber, vehicleNumber});
-    if (!user) {
+    const claim = await Claim.findOne({ name, policyNumber, vehicleNumber});
+    if (!claim) {
       res.status(404).send({ message: 'Policy not found' });
     } else {
-      res.send(user);
+      res.send(claim);
     }
   } catch (err) {
     res.status(500).send({ message: 'Error fetching policy' });
