@@ -130,9 +130,7 @@ app.post('/buy-policy', async (req, res) => {
     const policyEndDate = req.body.policyEndDate;
     const policyPrice = req.body.policyPrice;
     const vehicleType = req.body.vehicleType;
-
-    const policy = new Policy({
-      vehicleNumber, policyStartDate, policyEndDate, policyPrice, vehicleType});
+    const policy = new Policy({ vehicleNumber, policyStartDate, policyEndDate, policyPrice, vehicleType });
       await policy.save();
     res.send({ message: 'Policy purchased successfully!' });
   } catch (err) {
@@ -142,7 +140,7 @@ app.post('/buy-policy', async (req, res) => {
 
 app.get('/view-policy', async (req, res) => {
   try {
-    const claim = await Claim.find({});
+    const policy = await Policy.find({});
     res.send(policy);
   } catch (err) {
     res.status(500).send({ message: 'Error fetching policy' });
