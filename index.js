@@ -40,42 +40,47 @@ app.post('/register', async (req, res) => {
 
 app.patch('/change-name', async (req, res) => {
   try {
-    const email = req.body.email;
-    const newName = req.body.newName;
+    const { email, newName } = req.body;
+
     const user = await User.findOne({ email });
+
     if (!user) {
-      res.status(404).send({ message: 'User not found' });
-    } else {
-      user.name = newName;
-      await user.save();
-      res.send({ message: 'Name changed successfully' });
+      return res.status(404).send({ message: 'User not found' });
     }
+
+    user.name = newName;
+    await user.save();
+    return res.send({ message: 'Name changed successfully' });
   } catch (err) {
-    res.status(500).send({ message: 'Error changing name' });
+    console.error('Error changing name:', err);
+    return res.status(500).send({ message: 'Error changing name' });
   }
 });
 
+
 app.patch('/change-password', async (req, res) => {
   try {
-    const email = req.body.email;
-    const oldPassword = req.body.oldPassword;
-    const newPassword = req.body.newPassword;
+    const { email, oldPassword, newPassword } = req.body;
+
     const user = await User.findOne({ email });
+
     if (!user) {
-      res.status(404).send({ message: 'User not found' });
-    } else {
-      if (!(await user.comparePassword(oldPassword))) {
-        res.status(401).send({ message: 'Invalid old password' });
-      } else {
-        user.password = newPassword;
-        await user.save();
-        res.send({ message: 'Password changed successfully' });
-      }
+      return res.status(404).send({ message: 'User not found' });
     }
+
+    if (!(await user.comparePassword(oldPassword))) {
+      return res.status(401).send({ message: 'Invalid old password' });
+    }
+
+    user.password = newPassword;
+    await user.save();
+    return res.send({ message: 'Password changed successfully' });
   } catch (err) {
-    res.status(500).send({ message: 'Error changing password' });
+    console.error('Error changing password:', err);
+    return res.status(500).send({ message: 'Error changing password' });
   }
 });
+
 
 
 app.get('/dashboard', async (req, res) => {
@@ -121,17 +126,20 @@ app.get('/view-claims', async (req, res) => {
 
 app.get('/view-policy', async (req, res) => {
   try {
-    const policyNumber = req.query.policyNumber;
-    const vehicleNumber = req.query.vehicleNumber;
-    const claim = await Claim.findOne({ $and: [{ policyNumber }, { vehicleNumber }] });
+    const { policyNumber, vehicleNumber } = req.query;
+
+    const claim = await Claim.findOne({ policyNumber, vehicleNumber });
+
     if (!claim) {
-      res.status(404).send({ message: 'Policy not found' });
-    } else {
-      res.send(claim);
+      return res.status(404).send({ message: 'Policy not found' });
     }
+
+    return res.send(claim);
   } catch (err) {
-    res.status(500).send({ message: 'Error fetching policy' });
+    console.error('Error fetching policy:', err);
+    return res.status(500).send({ message: 'Error fetching policy' });
   }
 });
+
          
 app.listen(port, () => console.log(`App listening on port ${port}!`));
