@@ -28,12 +28,11 @@ mongoose
       policyEndDate: { type: Date, required: true },
       policyPrice: { type: Number, required: true },
       vehicleType: { type: String, required: true },
-      policyNumber: { type: String, required: true, index: true }
+      policyNumber: { type: String  }
     });
     
-    const Policy = mongoose.model('Policy', policySchema);
     const User = mongoose.model('User', userSchema);
     const Claim = mongoose.model('Claim', claimSchema);
-
+    const Policy = mongoose.model('Policy', policySchema);
 
 module.exports = { User, Claim ,Policy};
