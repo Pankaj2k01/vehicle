@@ -22,9 +22,18 @@ mongoose
       vehicleNumber: { type: String, required: true, index: true}
     });
     
+    const policySchema = new mongoose.Schema({
+      vehicleNumber: { type: String, required: true, index: true },
+      policyStartDate: { type: Date, required: true },
+      policyEndDate: { type: Date, required: true },
+      policyPrice: { type: Number, required: true },
+      vehicleType: { type: String, required: true },
+      policyNumber: { type: String, required: true, index: true }
+    });
     
+    const Policy = mongoose.model('Policy', policySchema);
     const User = mongoose.model('User', userSchema);
     const Claim = mongoose.model('Claim', claimSchema);
 
 
-module.exports = { User, Claim };
+module.exports = { User, Claim ,Policy};

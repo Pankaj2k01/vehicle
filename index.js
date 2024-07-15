@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const { User, Claim } = require('./db/db');
+const { User, Claim ,Policy} = require('./db/db');
 const port = process.env.PORT || 3000;
 const bodyparser = require('body-parser');
 app.use(bodyparser.json());
@@ -123,23 +123,30 @@ app.get('/view-claims', async (req, res) => {
   }
 });
 
-
-app.get('/view-policy', async (req, res) => {
+app.post('/buy-policy', async (req, res) => {
   try {
-    const { policyNumber, vehicleNumber } = req.query;
+    const vehicleNumber = req.body.vehicleNumber;
+    const policyStartDate = req.body.policyStartDate;
+    const policyEndDate = req.body.policyEndDate;
+    const policyPrice = req.body.policyPrice;
+    const vehicleType = req.body.vehicleType;
 
-    const claim = await Claim.findOne({ policyNumber, vehicleNumber });
-
-    if (!claim) {
-      return res.status(404).send({ message: 'Policy not found' });
-    }
-
-    return res.send(claim);
+    const policy = new Policy({
+      vehicleNumber, policyStartDate, policyEndDate, policyPrice, vehicleType});
+      await policy.save();
+    res.send({ message: 'Policy purchased successfully!' });
   } catch (err) {
-    console.error('Error fetching policy:', err);
-    return res.status(500).send({ message: 'Error fetching policy' });
+    res.status(500).send({ message: 'Error purchasing policy' });
   }
 });
 
+app.get('/view-policy', async (req, res) => {
+  try {
+    const claim = await Claim.find({});
+    res.send(policy);
+  } catch (err) {
+    res.status(500).send({ message: 'Error fetching policy' });
+  }
+});
          
 app.listen(port, () => console.log(`App listening on port ${port}!`));
