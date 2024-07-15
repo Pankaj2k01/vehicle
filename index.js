@@ -85,11 +85,11 @@ app.get('/view-policy', async (req, res) => {
   try {
     const policyNumber = req.query.policyNumber;
     const vehicleNumber = req.query.vehicleNumber;
-    const claim = await Claim.findOne({ policyNumber, vehicleNumber});
-    if (!claim) {
+    const claims = await Claim.findOne({ policyNumber, vehicleNumber});
+    if (!claims) {
       res.status(404).send({ message: 'Policy not found' });
     } else {
-      res.send(claim);
+      res.send(claims);
     }
   } catch (err) {
     res.status(500).send({ message: 'Error fetching policy' });
