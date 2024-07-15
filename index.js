@@ -38,6 +38,46 @@ app.post('/register', async (req, res) => {
   }
 });
 
+app.patch('/change-name', async (req, res) => {
+  try {
+    const email = req.body.email;
+    const newName = req.body.newName;
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(404).send({ message: 'User not found' });
+    } else {
+      user.name = newName;
+      await user.save();
+      res.send({ message: 'Name changed successfully' });
+    }
+  } catch (err) {
+    res.status(500).send({ message: 'Error changing name' });
+  }
+});
+
+app.patch('/change-password', async (req, res) => {
+  try {
+    const email = req.body.email;
+    const oldPassword = req.body.oldPassword;
+    const newPassword = req.body.newPassword;
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(404).send({ message: 'User not found' });
+    } else {
+      if (!(await user.comparePassword(oldPassword))) {
+        res.status(401).send({ message: 'Invalid old password' });
+      } else {
+        user.password = newPassword;
+        await user.save();
+        res.send({ message: 'Password changed successfully' });
+      }
+    }
+  } catch (err) {
+    res.status(500).send({ message: 'Error changing password' });
+  }
+});
+
+
 app.get('/dashboard', async (req, res) => {
   try {
     const name = req.query.name;
