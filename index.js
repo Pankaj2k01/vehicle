@@ -73,8 +73,8 @@ app.post('/raise-claim', async (req, res) => {
 
 app.get('/view-claims', async (req, res) => {
   try {
-    const claims = await Claim.find({});
-    res.send(claims);
+    const claim = await Claim.find({});
+    res.send(claim);
   } catch (err) {
     res.status(500).send({ message: 'Error fetching claims' });
   }
