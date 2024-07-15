@@ -43,11 +43,11 @@ app.get('/dashboard', async (req, res) => {
     const name = req.query.name;
     const policyNumber = req.query.policyNumber;
     const vehicleNumber = req.query.vehicleNumber;
-    const claim = await Claim.findOne({ name, policyNumber, vehicleNumber});
-    if (!claim) {
+    const user = await User.findOne({"name": name});
+    if (!user) {
       res.status(404).send({ message: 'Policy not found' });
     } else {
-      res.send(claim);
+      res.send(user);
     }
   } catch (err) {
     res.status(500).send({ message: 'Error fetching policy' });
