@@ -10,9 +10,7 @@ mongoose
     const userSchema = new mongoose.Schema({
       email: { type: String, required: true },
       password: { type: String, required: true },
-      name: { type: String, required: true },
-      policyNumber: { type: String, required: true },
-      vehicleNumber: { type: String, required: true }
+      name: { type: String, required: true }
     });
     
     const claimSchema = new mongoose.Schema({
