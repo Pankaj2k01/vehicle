@@ -41,16 +41,14 @@ app.post('/register', async (req, res) => {
 app.get('/dashboard', async (req, res) => {
   try {
     const name = req.query.name;
-    const policyNumber = req.query.policyNumber;
-    const vehicleNumber = req.query.vehicleNumber;
     const user = await User.findOne({"name": name});
     if (!user) {
-      res.status(404).send({ message: 'Policy not found' });
+      res.status(404).send({ message: 'name not found' });
     } else {
       res.send(user);
     }
   } catch (err) {
-    res.status(500).send({ message: 'Error fetching policy' });
+    res.status(500).send({ message: 'Error fetching data' });
   }
 });
 
@@ -85,7 +83,7 @@ app.get('/view-policy', async (req, res) => {
   try {
     const policyNumber = req.query.policyNumber;
     const vehicleNumber = req.query.vehicleNumber;
-    const claim = await Claim.findOne({ policyNumber, vehicleNumber});
+    const claim = await Claim.findOne({ $and: [{ policyNumber }, { vehicleNumber }] });
     if (!claim) {
       res.status(404).send({ message: 'Policy not found' });
     } else {
