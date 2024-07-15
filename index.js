@@ -130,13 +130,31 @@ app.post('/buy-policy', async (req, res) => {
     const policyEndDate = req.body.policyEndDate;
     const policyPrice = req.body.policyPrice;
     const vehicleType = req.body.vehicleType;
-    const policy = new Policy({ vehicleNumber, policyStartDate, policyEndDate, policyPrice, vehicleType });
-      await policy.save();
-    res.send({ message: 'Policy purchased successfully!' });
+
+    // Generate a unique policy number
+    const policyNumber = generatePolicyNumber();
+
+    const policy = new Policy({ 
+      vehicleNumber, 
+      policyStartDate, 
+      policyEndDate, 
+      policyPrice, 
+      vehicleType, 
+      policyNumber 
+    });
+    await policy.save();
+    res.send({ message: 'Policy purchased successfully!', policyNumber });
   } catch (err) {
     res.status(500).send({ message: 'Error purchasing policy' });
   }
 });
+
+
+function generatePolicyNumber() {
+
+  const uuid = require('uuid');
+  return uuid.v4().slice(0, 8);
+}
 
 app.get('/view-policy', async (req, res) => {
   try {
