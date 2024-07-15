@@ -18,9 +18,10 @@ mongoose
       claimDescription: { type: String, required: true },
       dateOfIncident: { type: Date, required: true },
       locationOfIncident: { type: String, required: true },
-      policyNumber: { type: String, required: true },
-      vehicleNumber: { type: String, required: true }
+      policyNumber: { type: String, required: true, index: true},
+      vehicleNumber: { type: String, required: true, index: true}
     });
+    
     
     const User = mongoose.model('User', userSchema);
     const Claim = mongoose.model('Claim', claimSchema);
